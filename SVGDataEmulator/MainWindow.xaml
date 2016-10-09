@@ -1,0 +1,44 @@
+﻿<Window x:Class="SVGDataEmulator.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SVGDataEmulator"
+        mc:Ignorable="d"
+        Title="SVGDataEmulator" Height="510.669" Width="652.838" ResizeMode="CanMinimize">
+    <Grid>
+        <Label x:Name="label_lastUpdateText" Content="Last update time:" HorizontalAlignment="Left" Margin="185,51,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="label_lastUpdateTime" Content="-" HorizontalAlignment="Left" Margin="291,51,0,0" VerticalAlignment="Top" Width="327"/>
+        <TextBox x:Name="textBoxUpdateTime" HorizontalAlignment="Left" Height="23" Margin="109,55,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="71"/>
+        <Button x:Name="buttonAddSource" Content="Add source (SVG)" HorizontalAlignment="Left" Margin="262,148,0,0" VerticalAlignment="Top" Width="154" Height="23" Click="buttonAddSource_Click"/>
+        <Button x:Name="buttonStartEmulate" Content="Start emulation" HorizontalAlignment="Left" Margin="262,342,0,0" VerticalAlignment="Top" Width="154" Height="23" Click="buttonStartEmulate_Click"/>
+        <Button x:Name="buttonStopEmulate" Content="Stop emulation" HorizontalAlignment="Left" Margin="455,342,0,0" VerticalAlignment="Top" Width="154" Height="23" Click="buttonStopEmulate_Click"/>
+        <TextBox x:Name="textBoxValueRangeFrom" HorizontalAlignment="Left" Height="23" Margin="190,86,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="71"/>
+        <TextBox x:Name="textBoxValueRangeTo" HorizontalAlignment="Left" Height="23" Margin="286,86,0,0" TextWrapping="Wrap" Text="10000" VerticalAlignment="Top" Width="71"/>
+        <Label x:Name="label_lastUpdateText_Copy" Content="-" HorizontalAlignment="Left" Margin="266,82,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="buttonRemoveSource" Content="Remove unchecked sources" HorizontalAlignment="Left" Margin="262,432,0,0" VerticalAlignment="Top" Width="154" Height="23" Background="#FFDDDDDD" Click="buttonRemoveSource_Click"/>
+        <ListBox x:Name="listBoxSources" Margin="10,122,390,10" SelectedIndex="0">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <CheckBox IsChecked="{Binding enabled}"/>
+                        <TextBlock Text="{Binding filename}" Margin="20,0,0,0"></TextBlock>
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <TextBox x:Name="textBoxSavePath" HorizontalAlignment="Left" Height="36" Margin="109,14,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="516"/>
+        <Button x:Name="buttonEmulateOnce" Content="Generate once" HorizontalAlignment="Left" Margin="262,218,0,0" VerticalAlignment="Top" Width="154" Height="23" Click="buttonEmulateOnce_Click"/>
+        <Label x:Name="label_updateInterval" Content="Update interval:" HorizontalAlignment="Left" Margin="10,51,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="label_dataSavePath" Content="Data save path:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="label_updateInterval_Copy" Content="Data values range (by default):" HorizontalAlignment="Left" Margin="10,82,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="buttonOpenGridWindow" Content="Open setpoints grid" HorizontalAlignment="Left" Margin="262,288,0,0" VerticalAlignment="Top" Width="154" Height="23" Click="buttonOpenGridWindow_Click"/>
+        <Label x:Name="label_updateInterval_Copy1" Content="You can add an .svg schema to the sources list on the left:" HorizontalAlignment="Left" Margin="262,122,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="label_updateInterval_Copy2" Content="You should then generate initial xml-data files and setpoints values" HorizontalAlignment="Left" Margin="262,176,0,0" VerticalAlignment="Top" Height="29"/>
+        <Label x:Name="label_updateInterval_Copy3" Content="for selected schemas:" HorizontalAlignment="Left" Margin="262,192,0,0" VerticalAlignment="Top" Height="29"/>
+        <Label x:Name="label_updateInterval_Copy4" Content="Manage data emulation process with set update interval:" HorizontalAlignment="Left" Margin="262,316,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="label_updateInterval_Copy5" Content="Manually edit user-defined setpoints for a selected schema" HorizontalAlignment="Left" Margin="262,246,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="label_updateInterval_Copy6" Content="You can also remove undesired schemas from the sources list:" HorizontalAlignment="Left" Margin="262,406,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="label_updateInterval_Copy7" Content="(grid opens in a new window):" HorizontalAlignment="Left" Margin="262,262,0,0" VerticalAlignment="Top"/>
+    </Grid>
+</Window>
