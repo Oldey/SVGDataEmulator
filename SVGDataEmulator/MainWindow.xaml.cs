@@ -19,8 +19,13 @@ namespace SVGDataEmulator
     {
         private List<DispatcherTimer> timers = new List<DispatcherTimer>();
         private int updateTime;
-        private float range1;
-        private float range2;
+        private double range1;
+        private double range2;
+        private string prefix;
+        private string attr;
+        private string analogType;
+        private string boolType = "BOOL";
+        private string precision;
 
         //private string getRandomString(int len)
         //{
@@ -130,7 +135,7 @@ namespace SVGDataEmulator
                 {
                     MessageBox.Show(
                         "A source with the name \"" + filename + "\" is already on the list. The selected source will not be added.",
-                        "Ошибка",
+                        "Error",
                         MessageBoxButton.OK,
                         MessageBoxImage.Error,
                         MessageBoxResult.OK,
@@ -173,8 +178,8 @@ namespace SVGDataEmulator
 
         private void buttonEmulateOnce_Click(object sender, RoutedEventArgs e)
         {
-            range1 = Single.Parse(textBoxValueRangeFrom.Text);
-            range2 = Single.Parse(textBoxValueRangeTo.Text);
+            range1 = Double.Parse(textBoxValueRangeFrom.Text);
+            range2 = Double.Parse(textBoxValueRangeTo.Text);
             savePath = textBoxSavePath.Text;
 
             List<string> propAttributes = new List<string>();
@@ -216,15 +221,17 @@ namespace SVGDataEmulator
                 int tempLength = temp.Count;
                 int lineOfFirstG, lineOfLastG;
                 int startGCount;
-                string prefix = "bod";
-                string attr = "change";
+                string prefix = textBoxPrefix.Text;
+                attr = textBoxAttr.Text;
+                analogType = textBoxType.Text;
+                precision = textBoxPrecision.Text;
                 int bodCode = 0;
                 int rngSeed = (int)DateTime.Now.Ticks & 0x0000FFFF;
 
                 for (int i = 0; i < tempLength; i++)
                 {
                     string bodShortName = String.Empty;
-                    string t = "BOOL";
+                    string t = boolType;
 
                     if (temp[i].Contains("<g id=\"" + prefix))
                     {
@@ -252,7 +259,7 @@ namespace SVGDataEmulator
                         {
                             if (temp[k].Contains("<text") && temp[k].Contains(attr))
                             {
-                                t = "R4";
+                                t = analogType;
                                 break;
                             }
                         }
@@ -270,15 +277,15 @@ namespace SVGDataEmulator
                         dictProp.Add(propAttributes[7], bodShortName);
                         dictProp.Add(propAttributes[8], "");
                         dictProp.Add(propAttributes[9], "");
-                        dictProp.Add(propAttributes[10], "");
+                        dictProp.Add(propAttributes[10], precision);
                         dictProp.Add(propAttributes[11], bodn);
                         dictData.Add(dataAttributes[0], bodn);
                         Random rng = new Random(++rngSeed);
-                        if (t == "R4")
+                        if (t == analogType)
                         {
                             dictData.Add(dataAttributes[1], (rng.NextDouble() * (range2 - range1) + range1).ToString());
                         }
-                        else /*if (t == "BOOL")*/
+                        else /*if (t == boolType)*/
                         {
                             dictData.Add(dataAttributes[1], Convert.ToBoolean(rng.Next(2)).ToString());
                         }
@@ -363,8 +370,8 @@ namespace SVGDataEmulator
 
         private void buttonStartEmulate_Click(object sender, RoutedEventArgs e)
         {
-            range1 = Single.Parse(textBoxValueRangeFrom.Text);
-            range2 = Single.Parse(textBoxValueRangeTo.Text);
+            range1 = Double.Parse(textBoxValueRangeFrom.Text);
+            range2 = Double.Parse(textBoxValueRangeTo.Text);
             updateTime = Convert.ToInt32(Math.Round((Single.Parse(textBoxUpdateTime.Text) * 1000)));
 
             foreach (var tObj in (listBoxSources.ItemsSource as List<src>).Where(myObj => myObj.enabled))
@@ -409,11 +416,11 @@ namespace SVGDataEmulator
                 float range1 = Single.Parse(xBods[i].Attribute("v1").Value);
                 float range2 = Single.Parse(xBods[i].Attribute("v2").Value);
                 Random rng = new Random(++rngSeed);
-                if (xe.Attribute("t").Value == "R4")
+                if (xe.Attribute("t").Value == analogType)
                 {
                     xe.Attribute("v").Value = (rng.NextDouble() * (range2 - range1) + range1).ToString();
                 }
-                else if (xe.Attribute("t").Value == "BOOL")
+                else if (xe.Attribute("t").Value == boolType)
                 {
                     xe.Attribute("v").Value = Convert.ToBoolean(rng.Next(2)).ToString();
                 }
@@ -436,7 +443,6 @@ namespace SVGDataEmulator
             GridWindow gridWindow = new GridWindow();
             string filename = (listBoxSources.ItemsSource as List<src>)[listBoxSources.SelectedIndex].filename;
             gridWindow.Title = "Setpoints for " + filename;
-            List<string> tags = new List<string>();
             gridWindow.Tag = filename;
             gridWindow.listView.ItemsSource = getGridItemsSourceFromXmlFile(filename);
             gridWindow.Show();
