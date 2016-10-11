@@ -5,13 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SVGDataEmulator"
         mc:Ignorable="d"
-        Title="SVGDataEmulator" Height="510.669" Width="829.838" ResizeMode="CanMinimize">
+        Title="SVGDataEmulator" Height="510.669" Width="829.838" ResizeMode="CanMinimize" Closed="Window_Closed">
     <Grid>
         <ListBox x:Name="listBoxSources" Margin="10,122,387,10" SelectedIndex="0">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Grid>
-                        <CheckBox IsChecked="{Binding enabled}"/>
+                        <CheckBox IsChecked="{Binding enabled}" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
                         <TextBlock Text="{Binding filename}" Margin="20,0,0,0"></TextBlock>
                     </Grid>
                 </DataTemplate>

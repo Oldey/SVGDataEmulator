@@ -5,12 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SVGDataEmulator"
         mc:Ignorable="d"
-        Title="Setpoints" Height="582.058" Width="885" ResizeMode="CanMinimize">
+        Title="Setpoints" Height="582.058" Width="1005" ResizeMode="CanMinimize">
     <Grid>
-        <ListView x:Name="listView" HorizontalAlignment="Left" Height="495" Margin="10,10,0,0" VerticalAlignment="Top" Width="847">
+        <ListView x:Name="listView" HorizontalAlignment="Left" Height="495" Margin="10,10,0,0" VerticalAlignment="Top" Width="967">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Element" Width="100">
+                    <GridViewColumn Header="Element" Width="160">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <Border BorderBrush="Gray" BorderThickness="0.65" Margin="-6.5,-3">
@@ -54,7 +54,7 @@
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn Header="Name" Width="100">
+                    <GridViewColumn Header="Name" Width="160">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBox Text="{Binding name}" Margin="-6.5,-3" MinWidth="10000"/>
@@ -99,7 +99,7 @@
                 </GridView>
             </ListView.View>
         </ListView>
-        <Button x:Name="buttonSave" Content="Save" HorizontalAlignment="Left" Margin="703,510,0,0" VerticalAlignment="Top" Width="154" Height="23" Click="buttonSave_Click"/>
+        <Button x:Name="buttonSave" Content="Save" HorizontalAlignment="Left" Margin="823,510,0,0" VerticalAlignment="Top" Width="154" Height="23" Click="buttonSave_Click"/>
 
     </Grid>
 </Window>

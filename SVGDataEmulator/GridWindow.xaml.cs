@@ -98,6 +98,10 @@ namespace SVGDataEmulator
             }
             xdocData.Save(dataXmlFile);
 
+            MessageBox.Show(
+                "Setpoints for \"" + filename + "\" were saved successfully.",
+                "Action complete",
+                MessageBoxButton.OK);
         }
     }
 }

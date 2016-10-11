@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Threading;
 using System.Xml.Linq;
 using static SVGDataEmulator.Globals;
@@ -221,7 +222,7 @@ namespace SVGDataEmulator
                 int tempLength = temp.Count;
                 int lineOfFirstG, lineOfLastG;
                 int startGCount;
-                string prefix = textBoxPrefix.Text;
+                prefix = textBoxPrefix.Text;
                 attr = textBoxAttr.Text;
                 analogType = textBoxType.Text;
                 precision = textBoxPrecision.Text;
@@ -365,7 +366,10 @@ namespace SVGDataEmulator
                 xdocData.Save(System.IO.Path.Combine(savePath, fname, "data.xml"));
             }
 
-
+            MessageBox.Show(
+                "Initial data files and setpoints values for selected schemas were created successfully.",
+                "Action complete",
+                MessageBoxButton.OK);
         }
 
         private void buttonStartEmulate_Click(object sender, RoutedEventArgs e)
@@ -436,6 +440,10 @@ namespace SVGDataEmulator
             {
                 timer.Stop();
             }
+            MessageBox.Show(
+                "Current emulation process is stopped.",
+                "Action complete",
+                MessageBoxButton.OK);
         }
 
         private void buttonOpenGridWindow_Click(object sender, RoutedEventArgs e)
@@ -446,6 +454,48 @@ namespace SVGDataEmulator
             gridWindow.Tag = filename;
             gridWindow.listView.ItemsSource = getGridItemsSourceFromXmlFile(filename);
             gridWindow.Show();
+        }
+
+        private void CheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            XDocument xdoc = XDocument.Load(sourcesXml);
+            List<src> sourcesList = (List<src>)listBoxSources.ItemsSource;
+            foreach (XElement xe in xdoc.Element("sources").Elements("source"))
+            {
+                for (int i = 0; i < sourcesList.Count; i++)
+                {
+                    if (xe.Attribute("filename").Value == sourcesList[i].filename)
+                    {
+                        xe.SetAttributeValue("enabled", "true");
+                        break;
+                    }
+                }
+            }
+            xdoc.Save(sourcesXml);
+        }
+
+        private void CheckBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            XDocument xdoc = XDocument.Load(sourcesXml);
+            List<src> sourcesList = (List<src>)listBoxSources.ItemsSource;
+            foreach (XElement xe in xdoc.Element("sources").Elements("source"))
+            {
+                for (int i = 0; i < sourcesList.Count; i++)
+                {
+                    if (xe.Attribute("filename").Value == sourcesList[i].filename)
+                    {
+                        xe.SetAttributeValue("enabled", "false");
+                        break;
+                    }
+                }
+            }
+            xdoc.Save(sourcesXml);
+        }
+
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            foreach (Window w in App.Current.Windows)
+                w.Close();
         }
     }
 }
