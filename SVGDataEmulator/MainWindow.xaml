@@ -12,7 +12,7 @@
                 <DataTemplate>
                     <Grid>
                         <CheckBox IsChecked="{Binding enabled}" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
-                        <TextBlock Text="{Binding filename}" Margin="20,0,0,0"></TextBlock>
+                        <TextBlock Text="{Binding alias}" Margin="20,0,0,0"></TextBlock>
                     </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>

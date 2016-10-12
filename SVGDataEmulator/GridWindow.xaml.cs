@@ -14,7 +14,7 @@ namespace SVGDataEmulator
     /// </summary>
     public partial class GridWindow : Window
     {
-        private string filename = String.Empty;
+        private string alias = String.Empty;
 
         public GridWindow()
         {
@@ -29,10 +29,10 @@ namespace SVGDataEmulator
         {
             XDocument xdoc = XDocument.Load(sourcesXml);
             XElement xSource = null;
-            filename = Tag as string;
+            alias = Tag as string;
             foreach (XElement xe in xdoc.Element("sources").Elements("source"))
             {
-                if (xe.Attribute("filename").Value == filename)
+                if (xe.Attribute("alias").Value == alias)
                 {
                     xSource = xe;
                     break;
@@ -65,7 +65,7 @@ namespace SVGDataEmulator
             }
             xdoc.Save(sourcesXml);
 
-            string propXmlFile = System.IO.Path.Combine(savePath, filename, "prop.xml");
+            string propXmlFile = System.IO.Path.Combine(savePath, alias, "prop.xml");
             XDocument xdocProp = XDocument.Load(propXmlFile);
             XElement xrootProp = xdocProp.Element("prop");
             //string UTCDate = DateTime.Now.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ");
@@ -84,7 +84,7 @@ namespace SVGDataEmulator
             }
             xdocProp.Save(propXmlFile);
 
-            string dataXmlFile = System.IO.Path.Combine(savePath, filename, "data.xml");
+            string dataXmlFile = System.IO.Path.Combine(savePath, alias, "data.xml");
             XDocument xdocData = XDocument.Load(dataXmlFile);
             XElement xrootData = xdocData.Element("data");
             //string UTCDate = DateTime.Now.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ");
@@ -99,7 +99,7 @@ namespace SVGDataEmulator
             xdocData.Save(dataXmlFile);
 
             MessageBox.Show(
-                "Setpoints for \"" + filename + "\" were saved successfully.",
+                "Setpoints for \"" + alias + "\" were saved successfully.",
                 "Action complete",
                 MessageBoxButton.OK);
         }

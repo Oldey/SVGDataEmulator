@@ -47,7 +47,7 @@ namespace SVGDataEmulator
             {
                 sourcesList.Add(new src()
                 {
-                    filename = xe.Attribute("filename").Value,
+                    alias = xe.Attribute("alias").Value,
                     path = xe.Attribute("path").Value,
                     enabled = Boolean.Parse(xe.Attribute("enabled").Value)
                 });
@@ -55,13 +55,13 @@ namespace SVGDataEmulator
             return sourcesList;
         }
 
-        private List<setPoint> getGridItemsSourceFromXmlFile(string filename)
+        private List<setPoint> getGridItemsSourceFromXmlFile(string alias)
         {
             XDocument xdoc = XDocument.Load(sourcesXml);
             XElement xSource = null;
             foreach (XElement xe in xdoc.Element("sources").Elements("source"))
             {
-                if (xe.Attribute("filename").Value == filename)
+                if (xe.Attribute("alias").Value == alias)
                 {
                     xSource = xe;
                     break;
@@ -107,7 +107,9 @@ namespace SVGDataEmulator
             if (File.Exists(sourcesXml))
             {
                 XDocument xdoc = XDocument.Load(sourcesXml);
-                listBoxSources.ItemsSource = getListBoxItemsSourceFromXmlFile(xdoc);     
+                listBoxSources.ItemsSource = getListBoxItemsSourceFromXmlFile(xdoc);
+                if (xdoc.Element("sources").HasAttributes)
+                    textBoxSavePath.Text = xdoc.Element("sources").Attribute("defaultSavePath").Value;
             }
             else
             {
@@ -124,18 +126,29 @@ namespace SVGDataEmulator
             if (openFileDialog.ShowDialog() == true)
             {
                 string path = openFileDialog.FileName;
-                string filename = System.IO.Path.GetFileNameWithoutExtension(path);
+                string alias = String.Empty;
+
+                var aliasDialog = new AliasWindow(path);
+                if (aliasDialog.ShowDialog() == true)
+                {
+                    alias = aliasDialog.ResponseText;
+                }
+                else
+                {
+                    return;
+                }
+
                 XDocument xdoc = XDocument.Load(sourcesXml);
 
-                List<string> filenames = new List<string>();
+                List<string> aliases = new List<string>();
                 foreach (XElement xe in xdoc.Element("sources").Elements("source"))
                 {
-                    filenames.Add(xe.Attribute("filename").Value);
+                    aliases.Add(xe.Attribute("alias").Value);
                 }
-                if (filenames.Contains(filename))
+                if (aliases.Contains(alias))
                 {
                     MessageBox.Show(
-                        "A source with the name \"" + filename + "\" is already on the list. The selected source will not be added.",
+                        "A source with the name \"" + alias + "\" is already on the list. The selected source will not be added.",
                         "Error",
                         MessageBoxButton.OK,
                         MessageBoxImage.Error,
@@ -146,11 +159,16 @@ namespace SVGDataEmulator
 
                 XNode xLastSource = xdoc.Element("sources").LastNode;
                 XElement newxe = new XElement("source");
-                newxe.SetAttributeValue("filename", filename);
+                newxe.SetAttributeValue("alias", alias);
                 newxe.SetAttributeValue("path", path);
                 newxe.SetAttributeValue("enabled", true);
                 if (xLastSource == null) xdoc.Element("sources").Add(newxe);
                 else xLastSource.AddAfterSelf(newxe);
+
+                string defaultSavePath = new DirectoryInfo(System.IO.Path.GetDirectoryName(path)).Parent.FullName;
+                textBoxSavePath.Text = defaultSavePath;
+                xdoc.Element("sources").SetAttributeValue("defaultSavePath", defaultSavePath);
+
                 xdoc.Save(sourcesXml);
                 listBoxSources.ItemsSource = getListBoxItemsSourceFromXmlFile(xdoc);
             }
@@ -159,11 +177,11 @@ namespace SVGDataEmulator
         private void buttonRemoveSource_Click(object sender, RoutedEventArgs e)
         {
             List<src> sourcesList = new List<src>();
-            List<string> files = new List<string>();
+            List<string> aliases = new List<string>();
             foreach (var tObj in (listBoxSources.ItemsSource as List<src>).Where(myObj => myObj.enabled))
             {
                 sourcesList.Add(tObj);
-                files.Add(tObj.filename);
+                aliases.Add(tObj.alias);
             }   
             listBoxSources.ItemsSource = sourcesList;
 
@@ -171,7 +189,7 @@ namespace SVGDataEmulator
             List<XElement> sources = xdoc.Element("sources").Elements("source").ToList<XElement>();
             foreach (XElement xe in sources)
             {
-                if (!files.Contains(xe.Attribute("filename").Value))
+                if (!aliases.Contains(xe.Attribute("alias").Value))
                     xe.Remove();
             }
             xdoc.Save(sourcesXml);  
@@ -301,12 +319,13 @@ namespace SVGDataEmulator
                 XDocument xdoc = XDocument.Load(sourcesXml);
                 List<XElement> sources = xdoc.Element("sources").Elements("source").ToList<XElement>();
                 XElement xSource = null;
-                string fname = System.IO.Path.GetFileNameWithoutExtension(path);
+                string xAlias = null;
                 foreach (XElement xe in sources)
                 {
-                    if (xe.Attribute("filename").Value == fname)
+                    if (xe.Attribute("path").Value == path)
                     {
                         xSource = xe;
+                        xAlias = xe.Attribute("alias").Value;
                         break;
                     }
                 }
@@ -345,9 +364,9 @@ namespace SVGDataEmulator
                     foreach (KeyValuePair<string, string> DE in item) 
                         xbod.Add(new XAttribute(DE.Key, DE.Value));
                 }
-                if (!Directory.Exists(System.IO.Path.Combine(savePath, fname)))
-                    Directory.CreateDirectory(System.IO.Path.Combine(savePath, fname));
-                xdocProp.Save(System.IO.Path.Combine(savePath, fname, "prop.xml"));
+                if (!Directory.Exists(System.IO.Path.Combine(savePath, xAlias)))
+                    Directory.CreateDirectory(System.IO.Path.Combine(savePath, xAlias));
+                xdocProp.Save(System.IO.Path.Combine(savePath, xAlias, "prop.xml"));
 
                 UTCDate = DateTime.Now.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ");
                 XDocument xdocData = new XDocument();
@@ -361,9 +380,9 @@ namespace SVGDataEmulator
                     foreach (KeyValuePair<string, string> DE in item)
                         xbod.Add(new XAttribute(DE.Key, DE.Value));
                 }
-                if (!Directory.Exists(System.IO.Path.Combine(savePath, fname)))
-                    Directory.CreateDirectory(System.IO.Path.Combine(savePath, fname));
-                xdocData.Save(System.IO.Path.Combine(savePath, fname, "data.xml"));
+                if (!Directory.Exists(System.IO.Path.Combine(savePath, xAlias)))
+                    Directory.CreateDirectory(System.IO.Path.Combine(savePath, xAlias));
+                xdocData.Save(System.IO.Path.Combine(savePath, xAlias, "data.xml"));
             }
 
             MessageBox.Show(
@@ -383,7 +402,7 @@ namespace SVGDataEmulator
                 DispatcherTimer timer = new DispatcherTimer();  // если надо, то в скобках указываем приоритет, например DispatcherPriority.Render
                 timer.Tick += new EventHandler(timerTick);
                 timer.Interval = new TimeSpan(0, 0, 0, 0, updateTime);
-                timer.Tag = tObj.filename;
+                timer.Tag = tObj.alias;
                 timers.Add(timer);
                 timer.Start();
             }
@@ -392,13 +411,13 @@ namespace SVGDataEmulator
 
         private void timerTick(object sender, EventArgs e)
         {
-            string fname = (sender as DispatcherTimer).Tag.ToString();
+            string alias = (sender as DispatcherTimer).Tag.ToString();
 
             XDocument xdocSources = XDocument.Load(sourcesXml);
             XElement xSource = null;
             foreach (XElement xe in xdocSources.Element("sources").Elements("source"))
             {
-                if (xe.Attribute("filename").Value == fname)
+                if (xe.Attribute("alias").Value == alias)
                 {
                     xSource = xe;
                     break;
@@ -408,7 +427,7 @@ namespace SVGDataEmulator
                 return;
             List<XElement> xBods = xSource.Elements().ToList<XElement>();
 
-            XDocument xdoc = XDocument.Load(System.IO.Path.Combine(textBoxSavePath.Text, fname, "data.xml"));
+            XDocument xdoc = XDocument.Load(System.IO.Path.Combine(textBoxSavePath.Text, alias, "data.xml"));
             XElement xroot = xdoc.Element("data");
             string UTCDate = DateTime.Now.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ");
             xroot.Attribute("d").Value = UTCDate;
@@ -430,7 +449,7 @@ namespace SVGDataEmulator
                 }
                 i++;
             }
-            xdoc.Save(System.IO.Path.Combine(textBoxSavePath.Text, fname, "data.xml"));
+            xdoc.Save(System.IO.Path.Combine(textBoxSavePath.Text, alias, "data.xml"));
             label_lastUpdateTime.Content = DateTime.Now.ToString();
         }
 
@@ -449,11 +468,14 @@ namespace SVGDataEmulator
         private void buttonOpenGridWindow_Click(object sender, RoutedEventArgs e)
         {
             GridWindow gridWindow = new GridWindow();
-            string filename = (listBoxSources.ItemsSource as List<src>)[listBoxSources.SelectedIndex].filename;
-            gridWindow.Title = "Setpoints for " + filename;
-            gridWindow.Tag = filename;
-            gridWindow.listView.ItemsSource = getGridItemsSourceFromXmlFile(filename);
-            gridWindow.Show();
+            if (listBoxSources.SelectedIndex > -1)
+            {
+                string alias = (listBoxSources.ItemsSource as List<src>)[listBoxSources.SelectedIndex].alias;
+                gridWindow.Title = "Setpoints for " + alias;
+                gridWindow.Tag = alias;
+                gridWindow.listView.ItemsSource = getGridItemsSourceFromXmlFile(alias);
+                gridWindow.Show();
+            }
         }
 
         private void CheckBox_Checked(object sender, RoutedEventArgs e)
@@ -464,7 +486,7 @@ namespace SVGDataEmulator
             {
                 for (int i = 0; i < sourcesList.Count; i++)
                 {
-                    if (xe.Attribute("filename").Value == sourcesList[i].filename)
+                    if (xe.Attribute("alias").Value == sourcesList[i].alias)
                     {
                         xe.SetAttributeValue("enabled", "true");
                         break;
@@ -482,7 +504,7 @@ namespace SVGDataEmulator
             {
                 for (int i = 0; i < sourcesList.Count; i++)
                 {
-                    if (xe.Attribute("filename").Value == sourcesList[i].filename)
+                    if (xe.Attribute("alias").Value == sourcesList[i].alias)
                     {
                         xe.SetAttributeValue("enabled", "false");
                         break;

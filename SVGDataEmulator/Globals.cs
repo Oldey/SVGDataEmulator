@@ -7,7 +7,7 @@ namespace SVGDataEmulator
     {
         public class src
         {
-            public string filename { get; set; }
+            public string alias { get; set; }
             public string path { get; set; }
             public bool enabled { get; set; }
         }
