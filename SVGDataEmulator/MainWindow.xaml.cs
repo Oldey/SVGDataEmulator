@@ -20,13 +20,8 @@ namespace SVGDataEmulator
     {
         private List<DispatcherTimer> timers = new List<DispatcherTimer>();
         private int updateTime;
-        private double range1;
-        private double range2;
-        private string prefix;
-        private string attr;
         private string analogType;
         private string boolType = "BOOL";
-        private string precision;
 
         //private string getRandomString(int len)
         //{
@@ -109,7 +104,10 @@ namespace SVGDataEmulator
                 XDocument xdoc = XDocument.Load(sourcesXml);
                 listBoxSources.ItemsSource = getListBoxItemsSourceFromXmlFile(xdoc);
                 if (xdoc.Element("sources").HasAttributes)
+                {
                     textBoxSavePath.Text = xdoc.Element("sources").Attribute("defaultSavePath").Value;
+                    savePath = textBoxSavePath.Text;
+                }
             }
             else
             {
@@ -165,9 +163,9 @@ namespace SVGDataEmulator
                 if (xLastSource == null) xdoc.Element("sources").Add(newxe);
                 else xLastSource.AddAfterSelf(newxe);
 
-                string defaultSavePath = new DirectoryInfo(System.IO.Path.GetDirectoryName(path)).Parent.FullName;
-                textBoxSavePath.Text = defaultSavePath;
-                xdoc.Element("sources").SetAttributeValue("defaultSavePath", defaultSavePath);
+                savePath = new DirectoryInfo(System.IO.Path.GetDirectoryName(path)).Parent.FullName;
+                textBoxSavePath.Text = savePath;
+                xdoc.Element("sources").SetAttributeValue("defaultSavePath", savePath);
 
                 xdoc.Save(sourcesXml);
                 listBoxSources.ItemsSource = getListBoxItemsSourceFromXmlFile(xdoc);
@@ -197,9 +195,15 @@ namespace SVGDataEmulator
 
         private void buttonEmulateOnce_Click(object sender, RoutedEventArgs e)
         {
-            range1 = Double.Parse(textBoxValueRangeFrom.Text);
-            range2 = Double.Parse(textBoxValueRangeTo.Text);
-            savePath = textBoxSavePath.Text;
+            double range1 = Double.Parse(textBoxValueRangeFrom.Text);
+            double range2 = Double.Parse(textBoxValueRangeTo.Text);
+            string prefix = textBoxPrefix.Text;
+            string attr = textBoxAttr.Text;
+            string precision = textBoxPrecision.Text;
+            string limitLoLo = textBoxLimitLoLo.Text;
+            string limitLo = textBoxLimitLo.Text;
+            string limitHi = textBoxLimitHi.Text;
+            string limitHiHi = textBoxLimitHiHi.Text;
 
             List<string> propAttributes = new List<string>();
             List<string> dataAttributes = new List<string>();
@@ -240,10 +244,7 @@ namespace SVGDataEmulator
                 int tempLength = temp.Count;
                 int lineOfFirstG, lineOfLastG;
                 int startGCount;
-                prefix = textBoxPrefix.Text;
-                attr = textBoxAttr.Text;
                 analogType = textBoxType.Text;
-                precision = textBoxPrecision.Text;
                 int bodCode = 0;
                 int rngSeed = (int)DateTime.Now.Ticks & 0x0000FFFF;
 
@@ -287,10 +288,10 @@ namespace SVGDataEmulator
                         Dictionary<string, string> dictData = new Dictionary<string, string>();
                         string bodn = "bod" + bodCode.ToString();
                         dictProp.Add(propAttributes[0], "-");
-                        dictProp.Add(propAttributes[1], "");
-                        dictProp.Add(propAttributes[2], "");
-                        dictProp.Add(propAttributes[3], "");
-                        dictProp.Add(propAttributes[4], "");
+                        dictProp.Add(propAttributes[1], limitLo);
+                        dictProp.Add(propAttributes[2], limitHi);
+                        dictProp.Add(propAttributes[3], limitLoLo);
+                        dictProp.Add(propAttributes[4], limitHiHi);
                         dictProp.Add(propAttributes[5], bodCode.ToString());
                         dictProp.Add(propAttributes[6], bodShortName); // full name
                         dictProp.Add(propAttributes[7], bodShortName);
@@ -393,8 +394,6 @@ namespace SVGDataEmulator
 
         private void buttonStartEmulate_Click(object sender, RoutedEventArgs e)
         {
-            range1 = Double.Parse(textBoxValueRangeFrom.Text);
-            range2 = Double.Parse(textBoxValueRangeTo.Text);
             updateTime = Convert.ToInt32(Math.Round((Single.Parse(textBoxUpdateTime.Text) * 1000)));
 
             foreach (var tObj in (listBoxSources.ItemsSource as List<src>).Where(myObj => myObj.enabled))
@@ -427,17 +426,17 @@ namespace SVGDataEmulator
                 return;
             List<XElement> xBods = xSource.Elements().ToList<XElement>();
 
-            XDocument xdoc = XDocument.Load(System.IO.Path.Combine(textBoxSavePath.Text, alias, "data.xml"));
+            XDocument xdoc = XDocument.Load(System.IO.Path.Combine(savePath, alias, "data.xml"));
             XElement xroot = xdoc.Element("data");
             string UTCDate = DateTime.Now.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ");
             xroot.Attribute("d").Value = UTCDate;
             int rngSeed = (int)DateTime.Now.Ticks & 0x0000FFFF;
-
+            analogType = textBoxType.Text;
             int i = 0;
             foreach (XElement xe in xroot.Elements("bod").ToList())
             {
-                float range1 = Single.Parse(xBods[i].Attribute("v1").Value);
-                float range2 = Single.Parse(xBods[i].Attribute("v2").Value);
+                double range1 = Double.Parse(xBods[i].Attribute("v1").Value);
+                double range2 = Double.Parse(xBods[i].Attribute("v2").Value);
                 Random rng = new Random(++rngSeed);
                 if (xe.Attribute("t").Value == analogType)
                 {
@@ -449,7 +448,7 @@ namespace SVGDataEmulator
                 }
                 i++;
             }
-            xdoc.Save(System.IO.Path.Combine(textBoxSavePath.Text, alias, "data.xml"));
+            xdoc.Save(System.IO.Path.Combine(savePath, alias, "data.xml"));
             label_lastUpdateTime.Content = DateTime.Now.ToString();
         }
 

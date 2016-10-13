@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="SVGDataEmulator" Height="510.669" Width="829.838" ResizeMode="CanMinimize" Closed="Window_Closed">
     <Grid>
-        <ListBox x:Name="listBoxSources" Margin="10,122,387,10" SelectedIndex="0">
+        <ListBox x:Name="listBoxSources" Margin="10,142,387,10" SelectedIndex="0">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Grid>
@@ -20,33 +20,42 @@
         <Label x:Name="label_lastUpdateText" Content="Last update time:" HorizontalAlignment="Left" Margin="199,42,0,0" VerticalAlignment="Top"/>
         <Label x:Name="label_lastUpdateTime" Content="-" HorizontalAlignment="Left" Margin="305,42,0,0" VerticalAlignment="Top" Width="235"/>
         <TextBox x:Name="textBoxUpdateTime" HorizontalAlignment="Left" Height="23" Margin="109,45,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="71"/>
-        <Button x:Name="buttonAddSource" Content="Add source (SVG)" HorizontalAlignment="Left" Margin="447,156,0,0" VerticalAlignment="Top" Width="154" Height="23" Click="buttonAddSource_Click"/>
-        <Button x:Name="buttonStartEmulate" Content="Start emulation" HorizontalAlignment="Left" Margin="447,350,0,0" VerticalAlignment="Top" Width="154" Height="23" Click="buttonStartEmulate_Click"/>
-        <Button x:Name="buttonStopEmulate" Content="Stop emulation" HorizontalAlignment="Left" Margin="635,350,0,0" VerticalAlignment="Top" Width="154" Height="23" Click="buttonStopEmulate_Click"/>
+        <Button x:Name="buttonAddSource" Content="Add source (SVG)" HorizontalAlignment="Left" Margin="447,163,0,0" VerticalAlignment="Top" Width="154" Height="23" Click="buttonAddSource_Click"/>
+        <Button x:Name="buttonStartEmulate" Content="Start emulation" HorizontalAlignment="Left" Margin="447,357,0,0" VerticalAlignment="Top" Width="154" Height="23" Click="buttonStartEmulate_Click"/>
+        <Button x:Name="buttonStopEmulate" Content="Stop emulation" HorizontalAlignment="Left" Margin="635,357,0,0" VerticalAlignment="Top" Width="154" Height="23" Click="buttonStopEmulate_Click"/>
         <TextBox x:Name="textBoxValueRangeFrom" HorizontalAlignment="Left" Height="23" Margin="186,76,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="71"/>
         <TextBox x:Name="textBoxValueRangeTo" HorizontalAlignment="Left" Height="23" Margin="282,76,0,0" TextWrapping="Wrap" Text="10000" VerticalAlignment="Top" Width="71"/>
         <Label x:Name="label_dataValuesRange2" Content="-" HorizontalAlignment="Left" Margin="262,72,0,0" VerticalAlignment="Top"/>
-        <Button x:Name="buttonRemoveSource" Content="Remove unchecked sources" HorizontalAlignment="Left" Margin="447,432,0,0" VerticalAlignment="Top" Width="154" Height="23" Background="#FFDDDDDD" Click="buttonRemoveSource_Click"/>
+        <Button x:Name="buttonRemoveSource" Content="Remove unchecked sources" HorizontalAlignment="Left" Margin="447,436,0,0" VerticalAlignment="Top" Width="154" Height="23" Background="#FFDDDDDD" Click="buttonRemoveSource_Click"/>
         <TextBox x:Name="textBoxSavePath" HorizontalAlignment="Left" Height="23" Margin="109,14,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="696"/>
-        <Button x:Name="buttonEmulateOnce" Content="Generate once" HorizontalAlignment="Left" Margin="447,226,0,0" VerticalAlignment="Top" Width="154" Height="23" Click="buttonEmulateOnce_Click"/>
+        <Button x:Name="buttonEmulateOnce" Content="Generate once" HorizontalAlignment="Left" Margin="447,233,0,0" VerticalAlignment="Top" Width="154" Height="23" Click="buttonEmulateOnce_Click"/>
         <Label x:Name="label_updateInterval" Content="Update interval:" HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top"/>
         <Label x:Name="label_dataSavePath" Content="Data save path:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
         <Label x:Name="label_dataValuesRange1" Content="Data values range (by default):" HorizontalAlignment="Left" Margin="10,72,0,0" VerticalAlignment="Top"/>
-        <Button x:Name="buttonOpenGridWindow" Content="Open setpoints grid" HorizontalAlignment="Left" Margin="447,296,0,0" VerticalAlignment="Top" Width="154" Height="23" Click="buttonOpenGridWindow_Click"/>
-        <Label x:Name="label_description1" Content="You can add an .svg schema to the sources list on the left:" HorizontalAlignment="Left" Margin="442,130,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="label_description2" Content="You should then generate initial xml-data files and setpoints values" HorizontalAlignment="Left" Margin="442,184,0,0" VerticalAlignment="Top" Height="29"/>
-        <Label x:Name="label_description3" Content="for selected schemas:" HorizontalAlignment="Left" Margin="442,200,0,0" VerticalAlignment="Top" Height="29"/>
-        <Label x:Name="label_description6" Content="Manage data emulation process with set update interval:" HorizontalAlignment="Left" Margin="442,324,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="label_description4" Content="Manually edit user-defined setpoints for a selected schema" HorizontalAlignment="Left" Margin="442,254,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="label_description7" Content="You can also remove undesired schemas from the sources list:" HorizontalAlignment="Left" Margin="442,406,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="label_description5" Content="(grid opens in a new window):" HorizontalAlignment="Left" Margin="442,270,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="buttonOpenGridWindow" Content="Open setpoints grid" HorizontalAlignment="Left" Margin="447,303,0,0" VerticalAlignment="Top" Width="154" Height="23" Click="buttonOpenGridWindow_Click"/>
+        <Label x:Name="label_description1" Content="You can add an .svg schema to the sources list on the left:" HorizontalAlignment="Left" Margin="442,137,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="label_description2" Content="You should then generate initial xml-data files and setpoints values" HorizontalAlignment="Left" Margin="442,191,0,0" VerticalAlignment="Top" Height="29"/>
+        <Label x:Name="label_description3" Content="for selected schemas:" HorizontalAlignment="Left" Margin="442,207,0,0" VerticalAlignment="Top" Height="29"/>
+        <Label x:Name="label_description6" Content="Manage data emulation process with set update interval:" HorizontalAlignment="Left" Margin="442,331,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="label_description4" Content="Manually edit user-defined setpoints for a selected schema" HorizontalAlignment="Left" Margin="442,261,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="label_description7" Content="You can also remove undesired schemas from the sources list:" HorizontalAlignment="Left" Margin="442,410,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="label_description5" Content="(grid opens in a new window):" HorizontalAlignment="Left" Margin="442,277,0,0" VerticalAlignment="Top"/>
         <Label x:Name="label_prefix" Content="Target schema element prefix:" HorizontalAlignment="Left" Margin="545,41,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="textBoxPrefix" HorizontalAlignment="Left" Height="23" Margin="718,45,0,0" TextWrapping="Wrap" Text="bod" VerticalAlignment="Top" Width="71"/>
-        <Label x:Name="label_attr" Content="Analog values attribute:" HorizontalAlignment="Left" Margin="578,69,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="textBoxAttr" HorizontalAlignment="Left" Height="23" Margin="718,73,0,0" TextWrapping="Wrap" Text="change" VerticalAlignment="Top" Width="71"/>
-        <Label x:Name="label_type" Content="Analog values type:" HorizontalAlignment="Left" Margin="600,97,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="textBoxType" HorizontalAlignment="Left" Height="23" Margin="718,101,0,0" TextWrapping="Wrap" Text="R4" VerticalAlignment="Top" Width="71"/>
+        <Label x:Name="label_attr" Content="Analog values attribute:" HorizontalAlignment="Left" Margin="583,72,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="textBoxAttr" HorizontalAlignment="Left" Height="23" Margin="718,76,0,0" TextWrapping="Wrap" Text="change" VerticalAlignment="Top" Width="71"/>
+        <Label x:Name="label_type" Content="Analog values type:" HorizontalAlignment="Left" Margin="600,103,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="textBoxType" HorizontalAlignment="Left" Height="23" Margin="718,107,0,0" TextWrapping="Wrap" Text="R4" VerticalAlignment="Top" Width="71"/>
         <Label x:Name="label_precision" Content="Precision:" HorizontalAlignment="Left" Margin="358,72,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="textBoxPrecision" HorizontalAlignment="Left" Height="23" Margin="423,76,0,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top" Width="71"/>
+        <Label x:Name="label_limits" Content="Limits" HorizontalAlignment="Left" Margin="10,103,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="textBoxLimitLoLo" HorizontalAlignment="Left" Height="23" Margin="96,107,0,0" TextWrapping="Wrap" Text="1000" VerticalAlignment="Top" Width="71"/>
+        <Label x:Name="label_limitLo" Content="Lo:" HorizontalAlignment="Left" Margin="172,103,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="textBoxLimitLo" HorizontalAlignment="Left" Height="23" Margin="202,107,0,0" TextWrapping="Wrap" Text="2500" VerticalAlignment="Top" Width="71"/>
+        <Label x:Name="label_limitHi" Content="Hi:" HorizontalAlignment="Left" Margin="278,103,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="textBoxLimitHi" HorizontalAlignment="Left" Height="23" Margin="307,107,0,0" TextWrapping="Wrap" Text="7500" VerticalAlignment="Top" Width="71"/>
+        <Label x:Name="label_limitHiHi" Content="HiHi:" HorizontalAlignment="Left" Margin="383,103,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="textBoxLimitHiHi" HorizontalAlignment="Left" Height="23" Margin="423,107,0,0" TextWrapping="Wrap" Text="9000" VerticalAlignment="Top" Width="71"/>
+        <Label x:Name="label_limitLoLo" Content="LoLo:" HorizontalAlignment="Left" Margin="53,103,0,0" VerticalAlignment="Top"/>
     </Grid>
 </Window>

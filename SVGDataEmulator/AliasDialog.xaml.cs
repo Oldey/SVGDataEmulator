@@ -41,9 +41,10 @@ namespace SVGDataEmulator
             DialogResult = true;
         }
 
-        private void button_Copy_Click(object sender, RoutedEventArgs e)
+        private void buttonCancel_Click(object sender, RoutedEventArgs e)
         {
             DialogResult = false;
         }
+
     }
 }

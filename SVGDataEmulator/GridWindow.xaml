@@ -5,9 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SVGDataEmulator"
         mc:Ignorable="d"
-        Title="Setpoints" Height="582.058" Width="1005" ResizeMode="CanMinimize">
+        Title="Setpoints" Height="582.058" Width="1015" ResizeMode="CanMinimize">
     <Grid>
-        <ListView x:Name="listView" HorizontalAlignment="Left" Height="495" Margin="10,10,0,0" VerticalAlignment="Top" Width="967">
+        <ListView x:Name="listView" HorizontalAlignment="Left" Height="495" Margin="10,10,0,0" VerticalAlignment="Top" Width="977">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Element" Width="160">
@@ -99,7 +99,7 @@
                 </GridView>
             </ListView.View>
         </ListView>
-        <Button x:Name="buttonSave" Content="Save" HorizontalAlignment="Left" Margin="823,510,0,0" VerticalAlignment="Top" Width="154" Height="23" Click="buttonSave_Click"/>
+        <Button x:Name="buttonSave" Content="Save" HorizontalAlignment="Left" Margin="833,510,0,0" VerticalAlignment="Top" Width="154" Height="23" Click="buttonSave_Click"/>
 
     </Grid>
 </Window>
